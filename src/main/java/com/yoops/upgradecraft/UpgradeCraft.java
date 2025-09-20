@@ -1,5 +1,8 @@
 package com.yoops.upgradecraft;
 
+import com.yoops.upgradecraft.block.ModBlock;
+import com.yoops.upgradecraft.item.ModItem;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -28,6 +31,9 @@ public class UpgradeCraft {
 
         NeoForge.EVENT_BUS.register(this);
 
+        ModItem.register(modEventBus);
+        ModBlock.register(modEventBus);
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
@@ -37,12 +43,16 @@ public class UpgradeCraft {
 
     private void commonSetup(FMLCommonSetupEvent event) {
 
-
     }
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS){
+            event.accept(ModItem.BARK);
+        }
+        if(event.getTabKey() == CreativeModeTabs.OP_BLOCKS){
+            event.accept(ModBlock.UNKNOWN);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
